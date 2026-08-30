@@ -661,4 +661,5 @@ function prepararEmblema() {
   Seletor.ligar();
   ligarEventos();
   atualizarContador();
+  buscarRegistros(); /* carrega o histórico já na abertura, para o contador da aba não ficar em "—" */
 })();
