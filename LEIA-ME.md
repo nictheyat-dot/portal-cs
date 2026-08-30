@@ -79,14 +79,15 @@ Placeholders: `{USERNAME}` (nick do expulso), `{RESPONSAVEL}`, `{MOTIVO}`, `{DAT
 
 ## Imagens
 
-Emblema em `assets/emblema-cs.png` (69 KB) e arte de fundo em
-`assets/fundo-desktop.webp` (2560 × 1440, 100 KB).
+Emblema em `midia-imagens/emblema-cs.png` (69 KB) e arte de fundo em
+`midia-imagens/fundo-desktop.webp` (2560 × 1440, 100 KB). O arquivo pesado de origem do
+fundo fica em `midia-imagens/originais/` (não vai para o site publicado).
 
 O fundo fica atrás de toda a interface, preso ao viewport (`position: fixed`), preenchendo
 a tela inteira sem repetir e sem distorcer (`cover` + `center center`) — não se desloca com
 rolagem nem com zoom. Para trocar, substitua o arquivo mantendo o nome. No mobile (até
-768px) essa camada não é carregada: fica só o fundo escuro liso.
-Detalhes em [assets/LEIA-ME.txt](assets/LEIA-ME.txt).
+768px) essa camada não é carregada: fica só o fundo escuro liso. Detalhes em
+[documentacao/EDITAR-CARTILHAS-E-IMAGENS.md](documentacao/EDITAR-CARTILHAS-E-IMAGENS.md).
 
 ---
 
@@ -184,4 +185,5 @@ comando sozinho a cada `push`.
 - Emblema otimizado de 455 KB para 69 KB; fundo de 7 MB (PNG) para 100 KB (WebP).
 - Lista de registros montada por `<template>` + `DocumentFragment`, com avatares em
   `loading="lazy"`; nada é renderizado enquanto a aba REGISTROS está fechada.
-- Busca com debounce e cache em memória do `localStorage`.
+- Busca com debounce sobre a lista já carregada em memória (sem nova chamada à API a
+  cada tecla digitada).
