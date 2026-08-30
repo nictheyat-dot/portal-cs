@@ -94,10 +94,10 @@ rolagem nem com zoom. Para trocar, substitua o arquivo mantendo o nome. No mobil
 ## Registros (histórico compartilhado)
 
 Cada expulsão gerada é enviada para `/api/expulsoes`, uma função Netlify
-([netlify/functions/expulsoes.mjs](netlify/functions/expulsoes.mjs)) que grava a lista
-num único blob (Netlify Blobs, `store` `expulsoes`, chave `registros`). Qualquer
-dispositivo que abrir o site e entrar na aba **REGISTROS** consulta o mesmo blob — não é
-mais um histórico por navegador. Detalhes do schema em
+([netlify/functions/expulsoes.mjs](netlify/functions/expulsoes.mjs)) que grava cada
+registro numa chave própria (Netlify Blobs, `store` `expulsoes`). Qualquer dispositivo
+que abrir o site e entrar na aba **REGISTROS** consulta o mesmo store — não é mais um
+histórico por navegador. Detalhes do schema em
 [documentacao/BANCO-DE-DADOS.md](documentacao/BANCO-DE-DADOS.md).
 
 O front-end (`Historico.listar` / `Historico.registrar` em
@@ -106,9 +106,11 @@ ao abrir a aba, ao clicar em **atualizar** e depois de registrar uma nova expuls
 rede ou o banco falhar, a interface mostra o erro e um botão de tentar novamente — nunca
 finge que salvou.
 
-Não existe exclusão remota: apagar um registro apagaria o histórico de todo mundo ao
-mesmo tempo, e o projeto ainda não autentica quem está usando o gerador (ver
-[documentacao/SEGURANCA-E-LIMITES.md](documentacao/SEGURANCA-E-LIMITES.md)).
+Exclusão existe, mas é protegida só por uma senha única compartilhada com a Liderança
+(pedida numa caixinha ao clicar na lixeira do registro) — não por identidade autenticada,
+já que o projeto ainda não tem login. Ver
+[documentacao/SEGURANCA-E-LIMITES.md](documentacao/SEGURANCA-E-LIMITES.md) para o que
+essa senha protege de verdade e o que não protege.
 
 ---
 
@@ -128,9 +130,10 @@ mesmo tempo, e o projeto ainda não autentica quem está usando o gerador (ver
   em [netlify.toml](netlify.toml): sem `default-src`, sem scripts/estilos inline, imagens
   só de `self` e `habbo.com.br`, `connect-src` restrito a `self` (só a própria função).
 - **`referrer: no-referrer`** e nenhum `eval`, `new Function` ou handler inline.
-- **Sem exclusão remota**: a API só tem `GET` (listar) e `POST` (registrar). Apagar um
-  registro afetaria o histórico de todo mundo ao mesmo tempo, e o projeto ainda não
-  autentica quem está usando o gerador — então essa operação simplesmente não existe.
+- **Exclusão protegida por senha compartilhada** (`GET`/`POST`/`DELETE` na API): apagar
+  afeta o histórico de todo mundo, e sem login de verdade a única trava possível é uma
+  senha única combinada com a Liderança — não identifica quem apagou. Ver
+  [documentacao/SEGURANCA-E-LIMITES.md](documentacao/SEGURANCA-E-LIMITES.md).
 
 ### Limitações reais (não têm como ser resolvidas só no frontend)
 

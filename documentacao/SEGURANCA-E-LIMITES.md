@@ -39,30 +39,30 @@ truque:
   histórico era local; a diferença agora é que o registro passa a ser visto por todos, em
   vez de ficar isolado no navegador de quem criou.
 
-## Por que não existe exclusão remota
+## Exclusão remota — senha compartilhada, não autenticação
 
 A versão anterior guardava o histórico no `localStorage` do navegador — cada supervisor
 via só o próprio histórico, então uma lixeira ali só apagava a cópia local de quem
-clicou. Com o histórico compartilhado isso muda de figura: apagar um registro apagaria
-o histórico de **todo mundo ao mesmo tempo**, e restringir o botão a certos nicks no
-navegador daria uma falsa sensação de controle — quem quisesse editar o pedido pelo
-inspetor do navegador continuaria conseguindo.
+clicou. Com o histórico compartilhado, apagar um registro afeta **todo mundo ao mesmo
+tempo**. O projeto ainda não tem identidade autenticada (login), então a exclusão em
+[netlify/functions/expulsoes.mjs](../netlify/functions/expulsoes.mjs) (`DELETE`) é
+protegida por uma **senha única compartilhada com a Liderança** (`SENHA_EXCLUSAO`, no
+topo do arquivo), pedida numa caixinha ao clicar na lixeira de um registro.
 
-Por isso a API em [netlify/functions/expulsoes.mjs](../netlify/functions/expulsoes.mjs)
-só responde a `GET` (listar) e `POST` (registrar). Não existe rota de exclusão nem de
-edição — a única forma de remover algo hoje é diretamente no painel do Netlify (Blobs),
-manualmente, por quem administra o site.
+Seja claro sobre o que isso é e o que não é:
+
+- **É** uma trava contra clique acidental — impede que qualquer pessoa que abra o site
+  apague um registro sem querer ou por curiosidade.
+- **Não é** controle de acesso de verdade. A senha viaja no corpo da requisição e
+  aparece nas ferramentas de desenvolvedor do navegador de quem a usar; qualquer pessoa
+  que descubra a senha (por exemplo vendo a rede do navegador) consegue apagar qualquer
+  registro. A exclusão também não fica vinculada a **quem** a fez — não há log de autor.
+- Por isso a senha deve ser tratada como uma combinação de time, não como uma credencial
+  individual, e trocada em `SENHA_EXCLUSAO` (dentro de `expulsoes.mjs`, seguido de um
+  novo deploy) se algum dia vazar além da Liderança.
 
 Restrição de verdade só existe com identidade autenticada **validada no servidor**. Se um
-dia este projeto ganhar login (por exemplo integrado ao DME System):
-
-1. A função precisa checar a sessão do próprio pedido (cookie ou token), nunca confiar em
-   um campo enviado pelo navegador dizendo quem é o usuário.
-2. Só então caberia adicionar `DELETE`/`PATCH` em `expulsoes.mjs`, com a permissão
-   conferida **no servidor**.
-3. Aí sim o histórico passa a suportar correções e exclusões, com auditoria de quem fez o
-   quê — o campo `status` do registro já existe pensando nesse cenário (hoje sempre
-   `"ativo"`, sem nenhuma tela para mudar isso).
-
-Enquanto isso não existir, o histórico compartilhado é **de criação e consulta**: tudo
-que for registrado fica registrado.
+dia este projeto ganhar login (por exemplo integrado ao DME System), a exclusão deveria
+passar a checar a sessão do próprio pedido (cookie ou token) em vez da senha fixa, e cada
+exclusão poderia ficar registrada (o campo `status` do registro já existe pensando nesse
+cenário — hoje toda criação usa `"ativo"`, sem histórico de quem mudou o quê).

@@ -36,8 +36,10 @@ usado.
   (a lista também é buscada sozinha ao abrir a aba e logo depois de gerar uma cartilha).
 - **Copiar de novo:** cada registro tem um botão de copiar — reenvia o mesmo BBCode para
   a área de transferência, sem precisar preencher o formulário de novo.
-- Não existe exclusão pelo site: um registro fica no histórico permanentemente (ver
-  [SEGURANCA-E-LIMITES.md](SEGURANCA-E-LIMITES.md) para o motivo).
+- **Excluir:** clique na lixeira do registro e digite a senha combinada com a Liderança.
+  A exclusão vale para todo mundo, na hora — não tem confirmação extra nem como desfazer.
+  Essa senha é uma trava contra clique acidental, não uma credencial individual (ver
+  [SEGURANCA-E-LIMITES.md](SEGURANCA-E-LIMITES.md) para os limites reais dela).
 
 > Se a rede ou o histórico remoto falhar, aparece um aviso com um botão de **tentar
 > novamente** — a página nunca finge que carregou ou salvou algo que não conseguiu.

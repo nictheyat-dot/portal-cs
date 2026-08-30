@@ -809,6 +809,91 @@ body.sem-emblema .area-cartao { padding-top: 0; }
 
 .registro-copiar .ic { width: 15px; height: 15px; }
 
+.registro-excluir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 2px solid var(--linha-campo);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--texto-fraco);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.registro-excluir:hover {
+  border-color: rgba(255, 107, 107, 0.6);
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--vermelho);
+}
+
+.registro-excluir:focus-visible { outline: 2px solid var(--vermelho); outline-offset: 2px; }
+
+.registro-excluir .ic { width: 15px; height: 15px; }
+
+.confirmar-exclusao {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid rgba(255, 107, 107, 0.15);
+}
+
+.confirmar-exclusao .senha-exclusao {
+  flex: 1;
+  min-width: 140px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 2px solid var(--linha-campo);
+  background: var(--campo);
+  color: var(--texto);
+  font-size: 13px;
+}
+
+.confirmar-exclusao .senha-exclusao:focus-visible {
+  outline: none;
+  border-color: rgba(255, 107, 107, 0.5);
+}
+
+.confirmar-exclusao .botao {
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+}
+
+.botao-confirmar-exclusao {
+  border: none;
+  background: var(--vermelho);
+  color: #2a0d0d;
+}
+
+.botao-confirmar-exclusao:hover { filter: brightness(1.08); }
+
+.botao-cancelar-exclusao {
+  border: 2px solid var(--linha-campo);
+  background: transparent;
+  color: var(--texto-suave);
+}
+
+.botao-cancelar-exclusao:hover { border-color: var(--linha-forte); }
+
+.erro-exclusao {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 12px;
+  color: var(--vermelho);
+}
+
+.erro-exclusao:empty { display: none; }
+
 .lista-vazia {
   padding: 40px 16px;
   text-align: center;

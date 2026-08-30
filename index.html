@@ -10,9 +10,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://www.habbo.com.br; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <link rel="icon" href="midia-imagens/icone-cs.png" type="image/png">
 <link rel="apple-touch-icon" href="midia-imagens/icone-cs.png">
-<link rel="stylesheet" href="design-visual/estilos.css?v=7">
-<script src="sistema-funcionamento/cartilhas.js?v=7" defer></script>
-<script src="sistema-funcionamento/aplicacao.js?v=7" defer></script>
+<link rel="stylesheet" href="design-visual/estilos.css?v=8">
+<script src="sistema-funcionamento/cartilhas.js?v=8" defer></script>
+<script src="sistema-funcionamento/aplicacao.js?v=8" defer></script>
 </head>
 <body>
 
@@ -29,6 +29,7 @@
   <symbol id="ic-seta" viewBox="0 0 24 24"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></symbol>
   <symbol id="ic-livro" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2z"/></symbol>
   <symbol id="ic-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="ic-lixeira" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M9 7V4h6v3"/></symbol>
 </svg>
 
 <main class="palco">
@@ -183,6 +184,15 @@
       <button type="button" class="registro-copiar" title="Copiar BBCode desta cartilha novamente" aria-label="Copiar BBCode desta cartilha">
         <svg class="ic"><use href="#ic-copiar"></use></svg>
       </button>
+      <button type="button" class="registro-excluir" title="Excluir este registro" aria-label="Excluir registro">
+        <svg class="ic"><use href="#ic-lixeira"></use></svg>
+      </button>
+    </div>
+    <div class="confirmar-exclusao" hidden>
+      <input type="password" class="senha-exclusao" placeholder="Senha da Liderança" autocomplete="off" aria-label="Senha para excluir este registro">
+      <button type="button" class="botao botao-confirmar-exclusao">Excluir</button>
+      <button type="button" class="botao botao-cancelar-exclusao">Cancelar</button>
+      <p class="erro-exclusao"></p>
     </div>
   </article>
 </template>

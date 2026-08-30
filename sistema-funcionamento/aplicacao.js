@@ -199,6 +199,22 @@ const Historico = {
       throw new Error(mensagem);
     }
     return corpo && corpo.registro;
+  },
+
+  async excluir(id, senha) {
+    const resposta = await fetch(URL_API, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id, senha: senha })
+    });
+
+    let corpo = null;
+    try { corpo = await resposta.json(); } catch (erro) { /* resposta sem corpo legível */ }
+
+    if (!resposta.ok) {
+      const mensagem = (corpo && corpo.erro) || 'Não foi possível excluir agora.';
+      throw new Error(mensagem);
+    }
   }
 };
 
@@ -526,7 +542,63 @@ function montarRegistro(item) {
     copiarComFeedback(item.bbcode, botaoCopiar, null, 'BBCode copiado novamente!');
   });
 
+  ligarExclusao(no, item);
+
   return no;
+}
+
+/* Exclusão protegida por uma senha compartilhada da Liderança (não é autenticação de
+   verdade — é só uma trava contra clique acidental, ver SEGURANCA-E-LIMITES.md). */
+function ligarExclusao(no, item) {
+  const botaoExcluir = no.querySelector('.registro-excluir');
+  const painel = no.querySelector('.confirmar-exclusao');
+  const campoSenha = painel.querySelector('.senha-exclusao');
+  const botaoConfirmar = painel.querySelector('.botao-confirmar-exclusao');
+  const botaoCancelar = painel.querySelector('.botao-cancelar-exclusao');
+  const erro = painel.querySelector('.erro-exclusao');
+
+  function fechar() {
+    painel.hidden = true;
+    campoSenha.value = '';
+    erro.textContent = '';
+  }
+
+  botaoExcluir.addEventListener('click', function () {
+    document.querySelectorAll('.confirmar-exclusao').forEach(function (outro) {
+      if (outro !== painel) outro.hidden = true;
+    });
+    painel.hidden = !painel.hidden;
+    if (!painel.hidden) campoSenha.focus();
+  });
+
+  botaoCancelar.addEventListener('click', fechar);
+
+  async function confirmar() {
+    const senha = campoSenha.value;
+    if (!senha) {
+      erro.textContent = 'Digite a senha da Liderança.';
+      return;
+    }
+
+    botaoConfirmar.disabled = true;
+    erro.textContent = '';
+    try {
+      await Historico.excluir(item.id, senha);
+      estado.registros = estado.registros.filter(function (r) { return r.id !== item.id; });
+      atualizarContador();
+      renderizarRegistros();
+      avisar('Registro excluído.');
+    } catch (erroExclusao) {
+      erro.textContent = erroExclusao.message;
+      botaoConfirmar.disabled = false;
+    }
+  }
+
+  botaoConfirmar.addEventListener('click', confirmar);
+  campoSenha.addEventListener('keydown', function (evento) {
+    if (evento.key === 'Enter') { evento.preventDefault(); confirmar(); }
+    if (evento.key === 'Escape') { evento.preventDefault(); fechar(); }
+  });
 }
 
 function renderizarStatusRegistros() {

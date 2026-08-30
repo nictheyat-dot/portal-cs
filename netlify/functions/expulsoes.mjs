@@ -11,16 +11,22 @@
   gravam em chaves diferentes e nunca disputam a mesma escrita — não existe janela em
   que uma grave por cima da outra.
 
-  Só existe criação e leitura: excluir um registro aqui apagaria o histórico de
-  todos os supervisores ao mesmo tempo, e este projeto ainda não tem uma forma
-  confiável de autenticar quem está fazendo a chamada. Por isso não há rota de
-  exclusão remota — a mesma restrição que já existia no histórico local.
+  Excluir um registro aqui apaga o histórico de todos os supervisores ao mesmo tempo,
+  e este projeto não tem login de verdade — então a exclusão é protegida só por uma
+  senha compartilhada (SENHA_EXCLUSAO), não por identidade autenticada. Isso não é
+  controle de acesso real: qualquer pessoa com a senha (ou que a veja no painel de
+  rede do navegador) consegue apagar qualquer registro, e a exclusão não fica
+  vinculada a quem a fez. Ver documentacao/SEGURANCA-E-LIMITES.md.
 */
 
 import { getStore } from '@netlify/blobs';
 
 const LIMITE_REGISTROS = 300;
 const TAMANHO_MAX_BBCODE = 20000;
+
+/* Trava simples contra exclusão acidental — combinada com a Liderança, não é uma
+   credencial de verdade. Ver o comentário no topo do arquivo. */
+const SENHA_EXCLUSAO = 'CSLIM3';
 
 const CABECALHOS = { 'Content-Type': 'application/json; charset=utf-8' };
 
@@ -110,6 +116,32 @@ async function tratarPost(store, requisicao) {
   return resposta({ registro: registro }, 201);
 }
 
+async function tratarDelete(store, requisicao) {
+  let bruto;
+  try {
+    bruto = await requisicao.json();
+  } catch (erro) {
+    return resposta({ erro: 'JSON inválido.' }, 400);
+  }
+
+  const id = limparTexto(bruto && bruto.id, 60);
+  const senha = typeof (bruto && bruto.senha) === 'string' ? bruto.senha : '';
+
+  if (senha !== SENHA_EXCLUSAO) return resposta({ erro: 'Senha incorreta.' }, 401);
+  if (!id) return resposta({ erro: 'Informe o registro a excluir.' }, 400);
+
+  const lista = await store.list({ consistency: 'strong' });
+  for (const blob of lista.blobs) {
+    const registro = await store.get(blob.key, { type: 'json', consistency: 'strong' }).catch(function () { return null; });
+    if (registro && registro.id === id) {
+      await store.delete(blob.key);
+      return resposta({ ok: true });
+    }
+  }
+
+  return resposta({ erro: 'Registro não encontrado (talvez já tenha sido excluído).' }, 404);
+}
+
 export default async function handler(requisicao) {
   let store;
   try {
@@ -121,6 +153,7 @@ export default async function handler(requisicao) {
   try {
     if (requisicao.method === 'GET') return await tratarGet(store);
     if (requisicao.method === 'POST') return await tratarPost(store, requisicao);
+    if (requisicao.method === 'DELETE') return await tratarDelete(store, requisicao);
     return resposta({ erro: 'Método não permitido.' }, 405);
   } catch (erro) {
     return resposta({ erro: 'Falha inesperada ao acessar o histórico.' }, 500);

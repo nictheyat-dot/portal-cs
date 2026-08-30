@@ -76,12 +76,15 @@ acidental. Duas submissões deliberadas com os mesmos nicks e motivo geram dois 
 Em [sistema-funcionamento/aplicacao.js](../sistema-funcionamento/aplicacao.js), o objeto
 `Historico`:
 
-- `Historico.listar()` — `GET /api/expulsoes`, chamado ao abrir a aba **REGISTROS**, ao
-  clicar em **atualizar** e depois de registrar uma nova expulsão.
+- `Historico.listar()` — `GET /api/expulsoes`, chamado ao abrir a página, ao abrir a aba
+  **REGISTROS**, ao clicar em **atualizar** e depois de registrar uma nova expulsão.
 - `Historico.registrar(dados)` — `POST /api/expulsoes` com os dados da cartilha recém
   gerada (incluindo o BBCode, para poder copiar de novo depois).
+- `Historico.excluir(id, senha)` — `DELETE /api/expulsoes` com `{id, senha}`. A senha é
+  comparada com `SENHA_EXCLUSAO` dentro da própria função; ver
+  [SEGURANCA-E-LIMITES.md](SEGURANCA-E-LIMITES.md) para os limites reais dessa proteção.
 
-Não há WebSocket nem polling automático: a lista é buscada nesses três momentos, o que é
+Não há WebSocket nem polling automático: a lista é buscada nesses momentos, o que é
 suficiente para o volume de uso (expulsões são um evento esporádico, não um chat).
 
 ## Variáveis de ambiente necessárias no Netlify
@@ -93,5 +96,6 @@ pelo runtime da função, para qualquer site hospedado no Netlify. Não crie nem
 
 ## Ver também
 
-- [SEGURANCA-E-LIMITES.md](SEGURANCA-E-LIMITES.md) — por que não existe exclusão remota.
+- [SEGURANCA-E-LIMITES.md](SEGURANCA-E-LIMITES.md) — o que a senha de exclusão protege
+  de verdade e o que não protege.
 - [PUBLICAR-NO-NETLIFY.md](PUBLICAR-NO-NETLIFY.md) — como publicar com as functions ativas.
