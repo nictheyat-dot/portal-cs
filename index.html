@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Cartilhas — Centro de Supervisão</title>
+<meta name="description" content="Sistema interno do Centro de Supervisão para geração de cartilhas de expulsão em BBCode.">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#1a1a1a">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://www.habbo.com.br; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="midia-imagens/icone-cs.png" type="image/png">
+<link rel="apple-touch-icon" href="midia-imagens/icone-cs.png">
+<link rel="stylesheet" href="design-visual/estilos.css?v=6">
+<script src="sistema-funcionamento/cartilhas.js?v=6" defer></script>
+<script src="sistema-funcionamento/aplicacao.js?v=6" defer></script>
+</head>
+<body>
+
+<div class="camada-fundo" aria-hidden="true"></div>
+
+<svg class="sprite-icones" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ic-escudo" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="ic-historico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="ic-copiar" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="ic-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="ic-alerta" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/></symbol>
+  <symbol id="ic-busca" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol>
+  <symbol id="ic-seta" viewBox="0 0 24 24"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></symbol>
+  <symbol id="ic-livro" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h6v18H6a2 2 0 0 1-2-2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v18h6a2 2 0 0 0 2-2z"/></symbol>
+  <symbol id="ic-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+</svg>
+
+<main class="palco">
+  <div class="area-cartao">
+
+    <div class="emblema" aria-hidden="true">
+      <img id="emblemaImagem" src="midia-imagens/emblema-cs.png" alt="" width="560" height="532" decoding="async">
+    </div>
+
+    <section class="cartao">
+
+      <header class="cabecalho">
+        <p class="supra">CENTRO DE SUPERVISÃO</p>
+        <h1 class="titulo-principal">GERADOR DE CARTILHAS</h1>
+        <p class="instrucao">Preencha os nicks, escolha o motivo e copie o título e o BBCode da cartilha.</p>
+      </header>
+
+      <nav class="abas" role="tablist">
+        <button type="button" class="aba ativa" data-painel="gerador" role="tab">GERADOR</button>
+        <button type="button" class="aba" data-painel="registros" role="tab">
+          REGISTROS <span class="contador" id="contadorRegistros">0</span>
+        </button>
+      </nav>
+
+      <section class="painel" id="painelGerador" role="tabpanel">
+
+        <form class="formulario" id="formulario" autocomplete="off" novalidate>
+
+          <div class="linha-dupla">
+            <div class="campo">
+              <label for="campoResponsavel">Nick do responsável <i>*</i></label>
+              <div class="entrada">
+                <span class="entrada-avatar" id="avatarResponsavel">
+                  <svg class="ic"><use href="#ic-usuario"></use></svg>
+                </span>
+                <input type="text" id="campoResponsavel" placeholder="Quem aplicou a expulsão" maxlength="40" spellcheck="false">
+              </div>
+              <p class="erro-campo" id="erroResponsavel"></p>
+            </div>
+
+            <div class="campo">
+              <label for="campoExpulso">Nick do militar expulso <i>*</i></label>
+              <div class="entrada">
+                <span class="entrada-avatar" id="avatarExpulso">
+                  <svg class="ic"><use href="#ic-usuario"></use></svg>
+                </span>
+                <input type="text" id="campoExpulso" placeholder="Quem está sendo desligado" maxlength="40" spellcheck="false">
+              </div>
+              <p class="erro-campo" id="erroExpulso"></p>
+            </div>
+          </div>
+
+          <div class="campo">
+            <span class="rotulo" id="rotuloMotivo">Motivo da expulsão <i>*</i></span>
+
+            <div class="selecao" id="selecaoMotivo">
+              <button type="button" class="selecao-gatilho" id="gatilhoMotivo"
+                      role="combobox" aria-haspopup="listbox" aria-expanded="false"
+                      aria-controls="listaMotivos" aria-labelledby="rotuloMotivo gatilhoMotivo">
+                <span class="selecao-icone"><svg class="ic"><use href="#ic-livro"></use></svg></span>
+                <span class="selecao-valor vazio" id="valorMotivo">Selecione o motivo...</span>
+                <svg class="ic selecao-seta"><use href="#ic-chevron"></use></svg>
+              </button>
+
+              <ul class="selecao-lista" id="listaMotivos" role="listbox" aria-labelledby="rotuloMotivo"></ul>
+            </div>
+
+            <p class="erro-campo" id="erroMotivo"></p>
+
+            <div class="ficha-motivo" id="fichaMotivo" hidden>
+              <p class="ficha-resumo" id="fichaResumo"></p>
+              <p class="ficha-base"><svg class="ic"><use href="#ic-escudo"></use></svg><span id="fichaBase"></span></p>
+            </div>
+          </div>
+
+          <div class="acoes">
+            <button type="submit" class="botao botao-principal">GERAR CARTILHA</button>
+          </div>
+        </form>
+
+        <section class="resultado" id="resultado" hidden>
+          <span class="bloco-rotulo">Título da mensagem privada</span>
+          <input type="text" class="saida-titulo" id="saidaTitulo" readonly aria-label="Título gerado para a mensagem privada">
+
+          <div class="copias">
+            <button type="button" class="botao botao-copiar-titulo" id="btnCopiarTitulo">
+              <svg class="ic"><use href="#ic-copiar"></use></svg>
+              <span>COPIAR TÍTULO</span>
+            </button>
+            <button type="button" class="botao botao-bbcode" id="btnCopiarBBCode">
+              <svg class="ic"><use href="#ic-copiar"></use></svg>
+              <span>COPIAR BBCODE</span>
+            </button>
+          </div>
+
+          <p class="rodape-resultado" id="rodapeResultado"></p>
+        </section>
+      </section>
+
+      <section class="painel" id="painelRegistros" role="tabpanel" hidden>
+
+        <div class="barra-registros">
+          <div class="entrada entrada-busca">
+            <span class="entrada-avatar"><svg class="ic"><use href="#ic-busca"></use></svg></span>
+            <input type="text" id="campoBusca" placeholder="Buscar por nick ou motivo..." spellcheck="false" aria-label="Buscar registros por nick ou motivo">
+          </div>
+          <button type="button" class="botao botao-atualizar" id="btnAtualizarRegistros" title="Atualizar histórico" aria-label="Atualizar histórico">
+            <svg class="ic"><use href="#ic-historico"></use></svg>
+          </button>
+        </div>
+
+        <p class="status-registros" id="statusRegistros" hidden></p>
+
+        <div class="lista-registros" id="listaRegistros"></div>
+      </section>
+
+    </section>
+  </div>
+
+  <footer class="creditos">
+    Desenvolvido por <strong>unloav</strong> • Direitos Reservados ao <strong>Centro de Supervisão</strong>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="ic"><use href="#ic-check"></use></svg>
+  <span id="toastTexto"></span>
+</div>
+
+<template id="modeloRegistro">
+  <article class="registro">
+    <div class="registro-topo">
+      <div class="pessoa">
+        <span class="pessoa-avatar"><img alt="" width="48" height="48" loading="lazy" decoding="async"></span>
+        <div class="pessoa-dados">
+          <div class="pessoa-nick"></div>
+          <div class="pessoa-papel">Responsável</div>
+        </div>
+      </div>
+      <span class="registro-seta"><svg class="ic"><use href="#ic-seta"></use></svg></span>
+      <div class="pessoa invertida">
+        <span class="pessoa-avatar"><img alt="" width="48" height="48" loading="lazy" decoding="async"></span>
+        <div class="pessoa-dados">
+          <div class="pessoa-nick"></div>
+          <div class="pessoa-papel">Expulso</div>
+        </div>
+      </div>
+    </div>
+    <div class="registro-meta">
+      <span class="etiqueta"></span>
+      <span class="registro-data"></span>
+      <button type="button" class="registro-copiar" title="Copiar BBCode desta cartilha novamente" aria-label="Copiar BBCode desta cartilha">
+        <svg class="ic"><use href="#ic-copiar"></use></svg>
+      </button>
+    </div>
+  </article>
+</template>
+
+</body>
+</html>

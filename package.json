@@ -1,0 +1,12 @@
+{
+  "name": "gerador-cs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerador de cartilhas de expulsão do Centro de Supervisão (site estático + função Netlify para o histórico compartilhado).",
+  "scripts": {
+    "build": "node build-publicacao/build.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.0.2"
+  }
+}

@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+
+# Saída de build (gerada por: node build-publicacao/build.mjs)
+build-publicacao/site/
+build-publicacao/site.zip
+
+# Variáveis de ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Netlify CLI (estado local de deploys/dev)
+.netlify/
+
+# Editor / SO
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
