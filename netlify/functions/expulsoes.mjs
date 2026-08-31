@@ -1,31 +1,8 @@
-/*
-  API do histórico de expulsões — GET lista, POST registra.
-
-  Fonte de verdade compartilhada entre todos os dispositivos: os registros ficam
-  no Netlify Blobs (armazenamento de objetos do próprio Netlify, sem conta nem
-  chave extra para configurar — as credenciais são injetadas automaticamente
-  pelo runtime da função). Nenhum segredo é lido do frontend.
-
-  Cada registro vira uma chave própria no store (nunca uma lista única reescrita a
-  cada gravação): duas expulsões criadas ao mesmo tempo, em dispositivos diferentes,
-  gravam em chaves diferentes e nunca disputam a mesma escrita — não existe janela em
-  que uma grave por cima da outra.
-
-  Excluir um registro aqui apaga o histórico de todos os supervisores ao mesmo tempo,
-  e este projeto não tem login de verdade — então a exclusão é protegida só por uma
-  senha compartilhada (SENHA_EXCLUSAO), não por identidade autenticada. Isso não é
-  controle de acesso real: qualquer pessoa com a senha (ou que a veja no painel de
-  rede do navegador) consegue apagar qualquer registro, e a exclusão não fica
-  vinculada a quem a fez. Ver documentacao/SEGURANCA-E-LIMITES.md.
-*/
-
 import { getStore } from '@netlify/blobs';
 
 const LIMITE_REGISTROS = 300;
 const TAMANHO_MAX_BBCODE = 20000;
 
-/* Trava simples contra exclusão acidental — combinada com a Liderança, não é uma
-   credencial de verdade. Ver o comentário no topo do arquivo. */
 const SENHA_EXCLUSAO = 'CSLIM3';
 
 const CABECALHOS = { 'Content-Type': 'application/json; charset=utf-8' };
@@ -58,9 +35,6 @@ function validar(bruto) {
   return { dados: { responsavel, expulso, motivo, motivoCurto, motivoId, bbcode } };
 }
 
-/* Chave lexicograficamente ordenável pelo instante de criação (epoch em milissegundos,
-   sem caracteres que precisem de escape) — permite achar os registros mais antigos sem
-   precisar baixar o conteúdo de todos. */
 function novaChave(criadoEm) {
   return 'reg_' + Date.parse(criadoEm) + '_' + crypto.randomUUID().slice(0, 8);
 }
@@ -77,9 +51,6 @@ async function tratarGet(store) {
   return resposta({ registros: registros.slice(0, LIMITE_REGISTROS) });
 }
 
-/* Mantém o store com no máximo LIMITE_REGISTROS chaves, apagando as mais antigas.
-   Não bloqueia a resposta do POST: falha aqui não significa que o registro não foi
-   salvo, só que a faxina de itens antigos não rodou desta vez. */
 async function podarAntigos(store) {
   const lista = await store.list({ consistency: 'strong' });
   const chaves = lista.blobs.map(function (b) { return b.key; }).sort();
@@ -87,7 +58,7 @@ async function podarAntigos(store) {
   if (excedente <= 0) return;
 
   await Promise.all(chaves.slice(0, excedente).map(function (chave) {
-    return store.delete(chave).catch(function () { /* melhor esforço */ });
+    return store.delete(chave).catch(function () { });
   }));
 }
 
@@ -111,7 +82,7 @@ async function tratarPost(store, requisicao) {
   }, validado.dados);
 
   await store.setJSON(novaChave(criadoEm), registro);
-  podarAntigos(store).catch(function () { /* melhor esforço, não afeta a resposta */ });
+  podarAntigos(store).catch(function () { });
 
   return resposta({ registro: registro }, 201);
 }

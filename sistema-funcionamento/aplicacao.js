@@ -42,7 +42,6 @@ const el = {
   modeloRegistro:  $('#modeloRegistro')
 };
 
-/* O BBCode vive só aqui: nunca é escrito em nenhum elemento da página. */
 const estado = {
   titulo: '',
   bbcode: '',
@@ -54,7 +53,6 @@ const estado = {
   ultimaGeracao: null
 };
 
-/* Tira o que quebraria o BBCode antes de o nick entrar na cartilha. */
 function limparNick(valor) {
   return String(valor || '').trim().replace(/[\[\]<>"']/g, '').slice(0, 40);
 }
@@ -78,7 +76,6 @@ function trocarIcone(elemento, nome) {
   if (uso) uso.setAttribute('href', '#' + nome);
 }
 
-/* A classe no container esconde o ícone: <svg> não obedece à propriedade hidden. */
 function atualizarAvatar(caixa, nick) {
   let img = caixa.querySelector('img');
 
@@ -132,7 +129,6 @@ function feedbackBotao(botao, texto) {
   }, TEMPO_FEEDBACK);
 }
 
-/* Clipboard moderno; sem ele, um campo temporário fora da tela. */
 async function copiar(texto) {
   if (!texto) return false;
 
@@ -140,7 +136,7 @@ async function copiar(texto) {
     try {
       await navigator.clipboard.writeText(texto);
       return true;
-    } catch (erro) { /* cai para a alternativa */ }
+    } catch (erro) { }
   }
 
   const area = document.createElement('textarea');
@@ -167,8 +163,6 @@ async function copiarComFeedback(texto, botao, rotulo, mensagem) {
   }
 }
 
-/* Histórico compartilhado: lê e grava no banco remoto (Netlify Blobs, por trás de
-   /api/expulsoes). Não existe exclusão remota — ver netlify/functions/expulsoes.mjs. */
 const Historico = {
   async listar() {
     const resposta = await fetch(URL_API, { headers: { Accept: 'application/json' } });
@@ -192,7 +186,7 @@ const Historico = {
     });
 
     let corpo = null;
-    try { corpo = await resposta.json(); } catch (erro) { /* resposta sem corpo legível */ }
+    try { corpo = await resposta.json(); } catch (erro) { }
 
     if (!resposta.ok) {
       const mensagem = (corpo && corpo.erro) || 'Não foi possível registrar a expulsão agora.';
@@ -209,7 +203,7 @@ const Historico = {
     });
 
     let corpo = null;
-    try { corpo = await resposta.json(); } catch (erro) { /* resposta sem corpo legível */ }
+    try { corpo = await resposta.json(); } catch (erro) { }
 
     if (!resposta.ok) {
       const mensagem = (corpo && corpo.erro) || 'Não foi possível excluir agora.';
@@ -218,7 +212,6 @@ const Historico = {
   }
 };
 
-/* Seletor de motivo: combobox acessível, sem <select> nativo. */
 const Seletor = {
   opcoes: [],
   aberto: false,
@@ -547,8 +540,6 @@ function montarRegistro(item) {
   return no;
 }
 
-/* Exclusão protegida por uma senha compartilhada da Liderança (não é autenticação de
-   verdade — é só uma trava contra clique acidental, ver SEGURANCA-E-LIMITES.md). */
 function ligarExclusao(no, item) {
   const botaoExcluir = no.querySelector('.registro-excluir');
   const painel = no.querySelector('.confirmar-exclusao');
@@ -720,7 +711,6 @@ function ligarEventos() {
   });
 }
 
-/* Sem midia-imagens/emblema-cs.png o topo fica limpo, sem imagem quebrada. */
 function prepararEmblema() {
   const esconder = function () { document.body.classList.add('sem-emblema'); };
   el.emblema.addEventListener('error', esconder);
@@ -733,5 +723,5 @@ function prepararEmblema() {
   Seletor.ligar();
   ligarEventos();
   atualizarContador();
-  buscarRegistros(); /* carrega o histórico já na abertura, para o contador da aba não ficar em "—" */
+  buscarRegistros();
 })();

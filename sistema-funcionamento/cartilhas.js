@@ -1,21 +1,3 @@
-/*
-  Modelos oficiais das cartilhas de expulsão do Centro de Supervisão.
-
-  O BBCode de cada motivo é montado em três partes:
-    CABECALHO (banner + saudação) + corpo (texto específico do motivo) + RODAPE
-    (botões de contato da Liderança + créditos).
-  CABECALHO e RODAPE são idênticos nos três motivos e ficam centralizados aqui: uma
-  alteração nos botões de WhatsApp ou nos créditos passa a valer para todas as
-  cartilhas de uma vez, sem precisar editar cada bloco.
-
-  Para editar o texto de um motivo, mexa apenas no campo "corpo" (entre crases). Para
-  um motivo novo, copie um bloco inteiro, troque id/label/titulo/corpo e acrescente o
-  id em ORDEM_MOTIVOS — o seletor se monta sozinho.
-  Dentro do BBCode não use crase nem ${ : quebram a string do JavaScript.
-
-  Placeholders: {USERNAME} (expulso), {RESPONSAVEL}, {MOTIVO}, {DATA}, {HORA}.
-*/
-
 const CABECALHO = `
 [font=Poppins][table style="width:100%;border:none!important;overflow:hidden;border-radius:15px;border-collapse:collapse;border-spacing:0" bgcolor="#3e8025"][tr style="border:none!important"][td style="border:none!important;overflow:hidden;padding:0;font-family:Poppins,Arial,sans-serif"][img]https://i.imgur.com/2KiC335.png[/img][/td][/tr][tr style="border:none!important"][td style="border:none!important;overflow:hidden;padding:12px 8px 7px;font-family:Poppins,Arial,sans-serif" bgcolor="#2e581d"][center][table style="width:auto;border:none!important;border-spacing:0;position:relative;z-index:2;margin-bottom:-9px"][tr style="border:none!important"][td style="border:none!important;background:#339900;color:#ffffff;border-radius:999px;padding:5px 17px;font-weight:700;font-size:10px;text-transform:uppercase;white-space:nowrap;box-shadow:0 2px 5px rgba(0,0,0,0.25)"]NOTIFICAÇÃO DE EXPULSÃO[/td][/tr][/table][/center][table style="width:100%;border:none!important;overflow:hidden;line-height:1.55em;border-radius:13px;border-collapse:collapse;border-spacing:0" bgcolor="#ffffff"][tr style="border:none!important"][td style="border:none!important;overflow:hidden;padding:19px 19px 16px;font-family:Poppins,Arial,sans-serif" bgcolor="#ffffff"][center]Saudações, [color=#00c203][b]{USERNAME}[/b][/color]![/center]
 
@@ -29,7 +11,6 @@ const RODAPE = `[/left][/td][/tr][/table][center][table style="width:78%;border:
 
 const TEMPLATES = {
 
-  /* 1) META SEMANAL */
   metaSemanal: {
     id: 'metaSemanal',
     label: 'Meta semanal não cumprida',
@@ -44,7 +25,6 @@ Esse encerramento não precisa representar o fim da sua trajetória no CS. Se ai
 Para receber as orientações necessárias — ou caso considere que houve algum equívoco na decisão — entre em contato diretamente com a [b][color=#00c203]Liderança do Centro de Supervisão[/color][/b] por um dos botões abaixo.`
   },
 
-  /* 2) INATIVIDADE POR 7 DIAS */
   inatividade7Dias: {
     id: 'inatividade7Dias',
     label: 'Inatividade por 07 dias',
@@ -59,7 +39,6 @@ A participação no Centro exige presença e acompanhamento contínuo das ativid
 Se desejar receber orientações sobre uma possível readmissão — ou caso considere que exista alguma informação relevante sobre o período de ausência que deva ser analisada — entre em contato diretamente com a [b][color=#00c203]Liderança do Centro de Supervisão[/color][/b] por um dos botões abaixo.`
   },
 
-  /* 3) CAPACITAÇÃO NÃO REALIZADA NO PRAZO */
   capacitacaoPrazo: {
     id: 'capacitacaoPrazo',
     label: 'Capacitação não realizada no prazo',
@@ -76,13 +55,11 @@ Caso ainda tenha interesse em fazer parte do Centro de Supervisão, entre em con
 
 };
 
-/* Monta o BBCode final de cada motivo uma única vez, no carregamento do script. */
 Object.keys(TEMPLATES).forEach(function (id) {
   const motivo = TEMPLATES[id];
   motivo.bbcode = CABECALHO + motivo.corpo + RODAPE;
 });
 
-/* Ordem dos motivos no seletor. */
 const ORDEM_MOTIVOS = ['metaSemanal', 'inatividade7Dias', 'capacitacaoPrazo'];
 
 function listarMotivos() {

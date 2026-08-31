@@ -1,17 +1,3 @@
-/*
-  Gera a versão de produção do Gerador de Cartilhas em build-publicacao/site.
-
-      node build-publicacao/build.mjs
-
-  Copia tudo que o site usa de verdade (index.html, CSS, JavaScript, fontes,
-  imagens e netlify.toml), mantendo os caminhos relativos para que a pasta
-  "site" funcione como raiz de um domínio. HTML e CSS saem minificados.
-
-  Não usa npm nem nenhuma dependência: só a biblioteca padrão do Node.
-  No fim, confere se todo arquivo referenciado pelo HTML e pelo CSS realmente
-  existe dentro de site/ e falha se faltar alguma coisa.
-*/
-
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, statSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname, relative, posix, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,8 +6,6 @@ const AQUI = dirname(fileURLToPath(import.meta.url));
 const RAIZ = dirname(AQUI);
 const SITE = join(AQUI, 'site');
 
-/* Não entram na publicação: pasta do próprio build, manuais, originais pesados
-   e arquivos de apoio que o site não carrega. */
 const FORA = [
   'build-publicacao',
   'documentacao',
@@ -80,19 +64,16 @@ function listarArquivos(pasta, base = pasta) {
   return saida;
 }
 
-/* ── 1. copia ─────────────────────────────────────────────────────────────── */
 rmSync(SITE, { recursive: true, force: true });
 mkdirSync(SITE, { recursive: true });
 copiarPasta(RAIZ, SITE, RAIZ);
 
-/* ── 2. minifica HTML e CSS já copiados ───────────────────────────────────── */
 for (const arquivo of listarArquivos(SITE)) {
   const caminho = join(SITE, arquivo);
   if (arquivo.endsWith('.html')) writeFileSync(caminho, minificarHtml(readFileSync(caminho, 'utf8')));
   else if (arquivo.endsWith('.css')) writeFileSync(caminho, minificarCss(readFileSync(caminho, 'utf8')));
 }
 
-/* ── 3. confere se tudo que o site referencia foi mesmo copiado ───────────── */
 const pendencias = [];
 
 function conferir(referencia, arquivoOrigem) {
@@ -114,7 +95,6 @@ for (const arquivo of listarArquivos(SITE)) {
   }
 }
 
-/* ── 4. relatório ─────────────────────────────────────────────────────────── */
 const arquivos = listarArquivos(SITE).sort();
 const total = arquivos.reduce((soma, a) => soma + statSync(join(SITE, a)).size, 0);
 

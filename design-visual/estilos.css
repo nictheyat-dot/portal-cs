@@ -82,7 +82,6 @@ body {
   stroke-linejoin: round;
 }
 
-/* Fundo do desktop: camada presa ao viewport, desligada no mobile (ver o fim). */
 .camada-fundo {
   position: fixed;
   inset: 0;
@@ -95,7 +94,6 @@ body {
   background-repeat: no-repeat;
 }
 
-/* Palco, emblema e cartão */
 .palco {
   position: relative;
   z-index: 2;
@@ -110,8 +108,6 @@ body {
   padding: 24px 20px 20px;
 }
 
-/* Emblema absoluto (z-index 1) atrás do cartão (z-index 2): o cartão cobre ~40%
-   da imagem e o padding-top reserva só a parte visível, sem mexer no fluxo. */
 .area-cartao {
   position: relative;
   width: 100%;
@@ -153,7 +149,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
 }
 
-/* Cabeçalho e abas */
 .cabecalho {
   text-align: center;
   margin-bottom: 12px;
@@ -243,7 +238,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   animation: surgir 0.28s ease both;
 }
 
-/* Formulário */
 .formulario {
   display: flex;
   flex-direction: column;
@@ -370,7 +364,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   margin-top: 2px;
 }
 
-/* Seletor de motivo */
 .selecao { position: relative; }
 
 .selecao-gatilho {
@@ -496,7 +489,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
 
 .selecao-opcao[aria-selected="true"] .ic { opacity: 1; }
 
-/* Botões */
 .botao {
   display: inline-flex;
   align-items: center;
@@ -554,7 +546,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   border-color: #1f6b00;
 }
 
-/* Resultado */
 .resultado {
   margin-top: 14px;
   padding-top: 12px;
@@ -607,8 +598,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   text-decoration: underline;
   padding: 0;
 }
-
-/* Registros */
 
 .barra-registros {
   display: flex;
@@ -903,7 +892,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   font-size: 13px;
 }
 
-/* Toast */
 .toast {
   position: fixed;
   top: 24px;
@@ -930,7 +918,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
 
 .toast.erro { background: #a83535; }
 
-/* Rodapé */
 .creditos {
   margin-top: 12px;
   margin-bottom: auto;
@@ -941,7 +928,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
 
 .creditos strong { color: var(--texto-suave); font-weight: 600; }
 
-/* Animações */
 @keyframes surgir {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -961,7 +947,6 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   }
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .camada-fundo { display: none; }
 
