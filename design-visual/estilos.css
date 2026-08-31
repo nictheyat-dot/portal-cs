@@ -843,6 +843,8 @@ body.sem-emblema .area-cartao { padding-top: 0; }
   border-top: 2px solid rgba(255, 107, 107, 0.15);
 }
 
+.confirmar-exclusao[hidden] { display: none; }
+
 .confirmar-exclusao .senha-exclusao {
   flex: 1;
   min-width: 140px;
