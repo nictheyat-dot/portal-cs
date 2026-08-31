@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Guia de Uso — Gerador de Cartilhas — Portal CS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde-escuro:#16311b;
+    --verde:#2e6b1f;
+    --verde-claro:#e9f0e6;
+    --grafite:#282b28;
+    --grafite-suave:#5c635d;
+    --linha:#d8dcd4;
+    --papel:#fbfbf8;
+    --dourado:#a3812c;
+    --dourado-claro:#c9a349;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family:'Source Serif 4', Georgia, serif;
+    color:var(--grafite);
+    background:#3a3d39;
+  }
+  h1,h2,h3,.rotulo,.numero,.eyebrow,.marca{ font-family:'Poppins', Arial, sans-serif; }
+
+  .pagina{
+    width:794px;
+    height:1123px;
+    position:relative;
+    background:var(--papel);
+    overflow:hidden;
+    page-break-after:always;
+  }
+  .pagina:last-child{ page-break-after:avoid; }
+
+  /* ---------- cabecalho / rodape padrao ---------- */
+  .miolo{ padding:38px 60px 78px; height:100%; position:relative; overflow:hidden; }
+  .cabecalho{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:8px; margin-bottom:12px;
+    border-bottom:2px solid var(--verde-escuro);
+  }
+  .eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:2.4px; text-transform:uppercase; color:var(--verde); }
+  .eyebrow b{ color:var(--verde-escuro); }
+  .pagina-tag{ font-size:10.5px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--grafite-suave); }
+
+  .rodape{
+    position:absolute; left:60px; right:60px; bottom:34px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:12px; border-top:1px solid var(--linha);
+    font-family:'Poppins',Arial,sans-serif; font-size:10px; color:var(--grafite-suave);
+  }
+  .rodape b{ color:var(--grafite); }
+
+  .titulo-pagina{ font-size:23px; font-weight:700; color:var(--verde-escuro); margin:0 0 6px; letter-spacing:-0.2px; }
+  .regra-ouro{ width:42px; height:3px; background:var(--dourado); border-radius:2px; margin:0 0 16px; }
+  .intro{ font-size:13.5px; line-height:1.5; color:var(--grafite); max-width:660px; margin:0 0 10px; }
+  .intro strong{ color:var(--verde-escuro); }
+
+  /* ---------- moldura de screenshot ---------- */
+  .moldura{
+    border:1px solid var(--linha);
+    border-radius:6px;
+    box-shadow:0 10px 24px rgba(20,30,20,0.14);
+    overflow:hidden;
+    position:relative;
+    background:#101010;
+  }
+  .marca-num{
+    position:absolute;
+    width:25px; height:25px; border-radius:50%;
+    background:var(--dourado);
+    color:#fff; font-size:12px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 3px #fff, 0 2px 5px rgba(0,0,0,0.35);
+    transform:translate(-50%,-50%);
+  }
+  .marca-caixa{
+    position:absolute;
+    border:2.5px solid var(--dourado);
+    border-radius:8px;
+    box-shadow:0 0 0 3px rgba(163,129,44,0.16);
+    pointer-events:none;
+  }
+
+  /* ---------- legenda numerada ---------- */
+  .legenda{ margin-top:10px; display:flex; flex-direction:column; gap:5px; }
+  .legenda-item{ display:flex; align-items:flex-start; gap:12px; }
+  .legenda-num{
+    flex-shrink:0; width:24px; height:24px; border-radius:50%;
+    background:var(--verde-escuro); color:#fff;
+    font-family:'Poppins',Arial,sans-serif; font-size:11.5px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .legenda-texto{ font-size:13px; line-height:1.55; color:var(--grafite); padding-top:2px; }
+  .legenda-texto b{ color:var(--verde-escuro); font-weight:600; }
+
+  .aviso{
+    margin-top:8px; padding:9px 16px; border-radius:6px;
+    background:var(--verde-claro); border-left:3px solid var(--verde);
+    font-size:12.5px; line-height:1.6; color:var(--grafite);
+  }
+  .aviso b{ color:var(--verde-escuro); }
+  .aviso.alerta{ background:#f7efe0; border-left-color:var(--dourado); }
+  .aviso.alerta b{ color:#7a5c1c; }
+
+  /* ---------- capa ---------- */
+  .capa{
+    background:radial-gradient(1100px 700px at 85% -10%, #1d4425 0%, var(--verde-escuro) 55%, #0f2313 100%);
+    color:#f3f5ef;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; height:100%;
+  }
+  .capa .marca{ font-size:12px; font-weight:700; letter-spacing:5px; color:var(--dourado-claro); margin-bottom:26px; }
+  .capa img.emblema{ width:150px; height:auto; margin-bottom:34px; filter:drop-shadow(0 12px 26px rgba(0,0,0,0.45)); }
+  .capa h1{ font-size:38px; font-weight:800; margin:0 0 10px; letter-spacing:0.5px; }
+  .capa .subtitulo{ font-size:17px; font-weight:400; font-family:'Source Serif 4',Georgia,serif; color:#dce6d8; margin:0 0 30px; max-width:480px; }
+  .capa .regra{ width:70px; height:2px; background:var(--dourado); margin:0 0 22px; }
+  .capa .rodape-capa{ position:absolute; bottom:46px; left:0; right:0; text-align:center; font-size:11px; color:#9db298; font-family:'Poppins',Arial,sans-serif; letter-spacing:0.5px; }
+
+  /* ---------- checklist da pagina final ---------- */
+  .checklist{ margin-top:6px; }
+  .checklist-item{ display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--linha); }
+  .checklist-item:last-child{ border-bottom:none; }
+  .checklist-marca{
+    flex-shrink:0; width:20px; height:20px; margin-top:1px;
+    border:2px solid var(--verde); border-radius:4px;
+  }
+  .checklist-texto{ font-size:13.5px; line-height:1.55; color:var(--grafite); }
+  .checklist-texto b{ color:var(--verde-escuro); }
+</style>
+</head>
+<body>
+
+<!-- ============ PÁGINA 1 — CAPA ============ -->
+<section class="pagina">
+  <div class="capa">
+    <div class="marca">PORTAL CS</div>
+    <img class="emblema" src="../midia-imagens/emblema-cs.png" alt="">
+    <h1>GUIA DE UTILIZAÇÃO</h1>
+    <div class="regra"></div>
+    <div class="subtitulo">Gerador de Cartilhas de Expulsão<br>Centro de Supervisão</div>
+    <div class="rodape-capa">portalcs.netlify.app · Uso interno da Liderança e dos Supervisores</div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 2 — PREENCHIMENTO ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Preenchimento</div>
+    </div>
+
+    <h2 class="titulo-pagina">Identificando a expulsão</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">Todo registro começa pela identificação correta das duas partes envolvidas e do motivo que fundamenta a decisão. Antes de prosseguir, confirme atentamente os nicks informados: a identificação incorreta de um militar poderá resultar no envio da notificação à pessoa errada.</p>
+
+    <div class="moldura" style="width:724px; height:655px;">
+      <img src="manual-assets/01-formulario.png" style="display:block; width:724px; height:655px;" alt="">
+      <div class="marca-caixa" style="left:86px; top:339px; width:267px; height:47px;"></div>
+      <div class="marca-num" style="left:86px; top:339px;">1</div>
+      <div class="marca-caixa" style="left:417px; top:339px; width:267px; height:47px;"></div>
+      <div class="marca-num" style="left:417px; top:339px;">2</div>
+      <div class="marca-caixa" style="left:38px; top:425px; width:648px; height:51px;"></div>
+      <div class="marca-num" style="left:38px; top:425px;">3</div>
+    </div>
+
+    <div class="legenda">
+      <div class="legenda-item"><div class="legenda-num">1</div><div class="legenda-texto"><b>Nick do responsável</b> — o nick de quem está aplicando a expulsão.</div></div>
+      <div class="legenda-item"><div class="legenda-num">2</div><div class="legenda-texto"><b>Nick do militar expulso</b> — o nick de quem está sendo desligado do Centro.</div></div>
+      <div class="legenda-item"><div class="legenda-num">3</div><div class="legenda-texto"><b>Motivo da expulsão</b> — ao abrir a lista, os três motivos previstos aparecem com sua fundamentação regimental correspondente. Selecione o que corresponde à situação real.</div></div>
+    </div>
+
+    <div class="aviso"><b>Atenção:</b> o responsável e o militar expulso nunca podem ser o mesmo nick — o Portal CS impede o registro nessa condição.</div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 2</span></div>
+</section>
+
+<!-- ============ PÁGINA 3 — GERANDO A CARTILHA ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Geração da cartilha</div>
+    </div>
+
+    <h2 class="titulo-pagina">Gerando a cartilha</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">Com os nicks e o motivo devidamente preenchidos, revise as informações uma última vez. Após confirmar, clique em <b>Gerar Cartilha</b>. O Portal CS preparará automaticamente o título e o BBCode da notificação — e o registro já é enviado ao histórico compartilhado do Centro de Supervisão.</p>
+
+    <div class="moldura" style="width:724px; height:615px;">
+      <img src="manual-assets/02-resultado.png" style="display:block; width:724px; height:838px; margin-top:0;" alt="">
+      <div class="marca-caixa" style="left:147px; top:560px; width:430px; height:49px;"></div>
+      <div class="marca-num" style="left:147px; top:560px;">4</div>
+    </div>
+
+    <div class="legenda">
+      <div class="legenda-item"><div class="legenda-num">4</div><div class="legenda-texto"><b>Gerar Cartilha</b> — monta o título e o BBCode e registra a expulsão no histórico compartilhado, visível para toda a Liderança.</div></div>
+    </div>
+
+    <div class="aviso alerta"><b>Importante:</b> o registro é enviado no momento em que a cartilha é gerada, não apenas quando o BBCode é copiado. Gere a cartilha somente quando tiver certeza dos dados informados.</div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 3</span></div>
+</section>
+
+<!-- ============ PÁGINA 4 — COPIANDO ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Cópia do conteúdo</div>
+    </div>
+
+    <h2 class="titulo-pagina">Copiando o título e o BBCode</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">A cartilha não aparece na tela como texto solto: o conteúdo é copiado diretamente para a área de transferência. Utilize os botões de cópia para evitar alterações acidentais na estrutura do BBCode.</p>
+
+    <div class="moldura" style="width:724px; height:223px; margin-top:2px;">
+      <img src="manual-assets/02-resultado.png" style="display:block; width:724px; height:838px; margin-top:-615px;" alt="">
+      <div class="marca-caixa" style="left:38px; top:51px; width:648px; height:51px;"></div>
+      <div class="marca-num" style="left:38px; top:51px;">5</div>
+      <div class="marca-caixa" style="left:38px; top:112px; width:271px; height:50px;"></div>
+      <div class="marca-num" style="left:38px; top:112px;">6</div>
+      <div class="marca-caixa" style="left:319px; top:112px; width:367px; height:50px;"></div>
+      <div class="marca-num" style="left:319px; top:112px;">7</div>
+    </div>
+
+    <div class="legenda">
+      <div class="legenda-item"><div class="legenda-num">5</div><div class="legenda-texto"><b>Título da mensagem privada</b> — o assunto já formatado, pronto para uso.</div></div>
+      <div class="legenda-item"><div class="legenda-num">6</div><div class="legenda-texto"><b>Copiar Título</b> → cole no campo de assunto da mensagem privada no System.</div></div>
+      <div class="legenda-item"><div class="legenda-num">7</div><div class="legenda-texto"><b>Copiar BBCode</b> → cole integralmente no corpo da mensagem. Não edite manualmente as tags copiadas sem necessidade.</div></div>
+    </div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 4</span></div>
+</section>
+
+<!-- ============ PÁGINA 5 — HISTÓRICO ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Histórico compartilhado</div>
+    </div>
+
+    <h2 class="titulo-pagina">Consultando o histórico</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">As expulsões registradas ficam disponíveis no histórico compartilhado do Portal CS, permitindo a consulta em diferentes dispositivos. Um registro criado por qualquer supervisor aparece automaticamente para toda a Liderança — não é necessário estar no mesmo computador.</p>
+
+    <div class="moldura" style="width:724px; height:657px;">
+      <img src="manual-assets/03-historico.png" style="display:block; width:724px; height:657px;" alt="">
+      <div class="marca-caixa" style="left:344px; top:252px; width:155px; height:38px;"></div>
+      <div class="marca-num" style="left:344px; top:252px;">8</div>
+      <div class="marca-caixa" style="left:86px; top:312px; width:544px; height:45px;"></div>
+      <div class="marca-num" style="left:86px; top:312px;">9</div>
+      <div class="marca-caixa" style="left:640px; top:312px; width:46px; height:46px;"></div>
+      <div class="marca-num" style="left:640px; top:312px;">10</div>
+      <div class="marca-caixa" style="left:598px; top:448px; width:30px; height:30px;"></div>
+      <div class="marca-num" style="left:598px; top:448px;">11</div>
+    </div>
+
+    <div class="legenda">
+      <div class="legenda-item"><div class="legenda-num">8</div><div class="legenda-texto"><b>Aba Registros</b> — o número ao lado mostra quantas expulsões já foram aplicadas ao todo.</div></div>
+      <div class="legenda-item"><div class="legenda-num">9</div><div class="legenda-texto"><b>Buscar</b> — localize um registro digitando o nick ou o motivo.</div></div>
+      <div class="legenda-item"><div class="legenda-num">10</div><div class="legenda-texto"><b>Atualizar</b> — busca os registros mais recentes, incluindo os aplicados em outros dispositivos.</div></div>
+      <div class="legenda-item"><div class="legenda-num">11</div><div class="legenda-texto"><b>Copiar novamente</b> — reenvia o BBCode de um registro antigo para a área de transferência, sem refazer o formulário.</div></div>
+    </div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 5</span></div>
+</section>
+
+<!-- ============ PÁGINA 6 — EXCLUSÃO ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Exclusão de registro</div>
+    </div>
+
+    <h2 class="titulo-pagina">Excluindo um registro</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">A exclusão afeta o histórico de todos os supervisores ao mesmo tempo e não pode ser desfeita. Por isso, ela é protegida por uma senha combinada com a Liderança.</p>
+
+    <div class="moldura" style="width:724px; height:579px;">
+      <img src="manual-assets/04-exclusao.png" style="display:block; width:724px; height:719px; margin-top:-140px;" alt="">
+      <div class="marca-caixa" style="left:638px; top:308px; width:30px; height:30px;"></div>
+      <div class="marca-num" style="left:638px; top:308px;">12</div>
+      <div class="marca-caixa" style="left:52px; top:362px; width:421px; height:37px;"></div>
+      <div class="marca-num" style="left:52px; top:362px;">13</div>
+      <div class="marca-caixa" style="left:481px; top:362px; width:80px; height:36px;"></div>
+      <div class="marca-num" style="left:481px; top:362px;">14</div>
+    </div>
+
+    <div class="legenda">
+      <div class="legenda-item"><div class="legenda-num">12</div><div class="legenda-texto"><b>Lixeira</b> — abre a confirmação de exclusão do registro correspondente.</div></div>
+      <div class="legenda-item"><div class="legenda-num">13</div><div class="legenda-texto"><b>Senha da Liderança</b> — informe a senha combinada internamente com a Liderança.</div></div>
+      <div class="legenda-item"><div class="legenda-num">14</div><div class="legenda-texto"><b>Excluir</b> — confirma a exclusão. Sem confirmação adicional e sem possibilidade de desfazer.</div></div>
+    </div>
+
+    <div class="aviso alerta"><b>Importante:</b> essa senha é uma trava contra exclusão acidental, combinada apenas com a Liderança — não deve ser compartilhada ou exibida publicamente.</div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 6</span></div>
+</section>
+
+<!-- ============ PÁGINA 7 — ANTES DE ENVIAR ============ -->
+<section class="pagina">
+  <div class="miolo">
+    <div class="cabecalho">
+      <div class="eyebrow"><b>PORTAL CS</b> · GUIA DE UTILIZAÇÃO</div>
+      <div class="pagina-tag">Boas práticas</div>
+    </div>
+
+    <h2 class="titulo-pagina">Antes de enviar</h2>
+    <div class="regra-ouro"></div>
+    <p class="intro">Uma cartilha enviada representa uma decisão formal do Centro de Supervisão. Antes de encaminhar a mensagem privada no System, confirme os pontos abaixo.</p>
+
+    <div class="checklist">
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Confirme o nick do militar expulso.</b> Um nick incorreto envia a notificação à pessoa errada.</div></div>
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Confirme o motivo selecionado.</b> Cada motivo tem uma fundamentação regimental própria.</div></div>
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Confira o título gerado</b> antes de colar no campo de assunto da mensagem privada.</div></div>
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Copie o BBCode integralmente</b> — não altere manualmente as tags sem necessidade.</div></div>
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Verifique se a cartilha corresponde ao motivo</b> antes de enviar a mensagem no System.</div></div>
+      <div class="checklist-item"><div class="checklist-marca"></div><div class="checklist-texto"><b>Lembre-se de que o histórico é compartilhado</b> — o registro fica visível para toda a Liderança, em qualquer dispositivo.</div></div>
+    </div>
+
+    <div class="aviso" style="margin-top:28px;">Dúvidas sobre o funcionamento do Portal CS podem ser encaminhadas à Liderança do Centro de Supervisão.</div>
+  </div>
+  <div class="rodape"><span><b>Guia de Uso</b> — Gerador de Cartilhas</span><span>Página 7</span></div>
+</section>
+
+</body>
+</html>
